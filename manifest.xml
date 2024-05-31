@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides"
+  xsi:type="MailApp">
+  <Id>fc188889-7206-4d15-9968-7a4966f7f4ca</Id>
+  <Version>1.0.0.2</Version>
+  <ProviderName>Microsoft Outlook Dev Center</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="Verwerk order"/>
+  <Description DefaultValue="Een Office Add-in om het verwerken van orders makkelijker te maken."/>
+  <IconUrl DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_64.png"/>
+  <SupportUrl DefaultValue="https://learn.microsoft.com/office/dev/add-ins/overview/office-add-in-code-samples"/>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemRead">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://77.250.103.130:3000/src/taskpane/taskpane.html"/>
+        <RequestedHeight>450</RequestedHeight>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Appointment" FormType="Edit"/>
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Requirements>
+      <bt:Sets DefaultMinVersion="1.4">
+        <bt:Set Name="Mailbox"/>
+      </bt:Sets>
+    </Requirements>
+    <Hosts>
+      <Host xsi:type="MailHost">
+        <DesktopFormFactor>
+
+          <!-- Message Compose -->
+          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgComposeCmdGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Control xsi:type="Button" id="msgComposeInsertGist">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.SupertipTitle"/>
+                    <Description resid="TaskpaneButton.SupertipText"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                    <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                    <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+
+          <!-- Message Read -->
+          <ExtensionPoint xsi:type="MessageReadCommandSurface">
+            <OfficeTab id="TabDefault">
+              <Group id="msgReadCmdGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Control xsi:type="Button" id="msgReadInsertGist">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.SupertipTitle"/>
+                    <Description resid="TaskpaneButton.SupertipText"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                    <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                    <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+          
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <!-- <bt:Image id="Icon.16x16" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-80.png"/> -->
+        <bt:Image id="Volkers.Icon.16x16" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_16.png"/>
+        <bt:Image id="Volkers.Icon.32x32" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_32.png"/>
+        <bt:Image id="Volkers.Icon.80x80" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://77.250.103.130:3000/src/taskpane/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="CommandsGroup.Label" DefaultValue="Volkers Add-in"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Verwerk order"/>
+        <bt:String id="TaskpaneButton.SupertipTitle" DefaultValue="Verwerk order"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="TaskpaneButton.SupertipText" DefaultValue="Open de verwerk order add-in"/>
+      </bt:LongStrings>
+    </Resources>
+
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.4">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <DesktopFormFactor>
+
+            <!-- Message Compose -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="msgComposeCmdGroup">
+                  <Label resid="CommandsGroup.Label"/>
+                  <!-- Task pane button -->
+                  <Control xsi:type="Button" id="msgComposeOpenPaneButton">
+                    <Label resid="TaskpaneButton.Label" />
+                    <Supertip>
+                      <Title resid="TaskpaneButton.SupertipTitle" />
+                      <Description resid="TaskpaneButton.SupertipText" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                      <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                      <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url" />
+                      <SupportsPinning>true</SupportsPinning>
+                    </Action>
+                  </Control>
+                  <!-- <Control xsi:type="Button" id="msgComposeInsertGist">
+                    <Label resid="TaskpaneButton.Label"/>
+                    <Supertip>
+                      <Title resid="TaskpaneButton.SupertipTitle"/>
+                      <Description resid="TaskpaneButton.SupertipText"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                      <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                      <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control> -->
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+
+            <!-- Message Read -->
+            <ExtensionPoint xsi:type="MessageReadCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="msgReadCmdGroup">
+                  <Label resid="CommandsGroup.Label"/>
+                  <!-- Task pane button -->
+                  <Control xsi:type="Button" id="msgReadOpenPaneButton">
+                    <Label resid="TaskpaneButton.Label" />
+                    <Supertip>
+                      <Title resid="TaskpaneButton.SupertipTitle" />
+                      <Description resid="TaskpaneButton.SupertipText" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                      <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                      <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url" />
+                      <SupportsPinning>true</SupportsPinning>
+                    </Action>
+                  </Control>
+                  <!-- <Control xsi:type="Button" id="msgReadInsertGist">
+                    <Label resid="TaskpaneButton.Label"/>
+                    <Supertip>
+                      <Title resid="TaskpaneButton.SupertipTitle"/>
+                      <Description resid="TaskpaneButton.SupertipText"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Volkers.Icon.16x16"/>
+                      <bt:Image size="32" resid="Volkers.Icon.32x32"/>
+                      <bt:Image size="80" resid="Volkers.Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
+                      <SupportsPinning>true</SupportsPinning>
+                    </Action>
+                  </Control> -->
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+            
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <!-- <bt:Image id="Icon.16x16" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://officedev.github.io/Office-Add-in-samples/Samples/hello-world/outlook-hello-world/assets/icon-80.png"/> -->
+          <bt:Image id="Volkers.Icon.16x16" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_16.png"/>
+          <bt:Image id="Volkers.Icon.32x32" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_32.png"/>
+          <bt:Image id="Volkers.Icon.80x80" DefaultValue="https://77.250.103.130:3000/assets/volkers_logo_80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://77.250.103.130:3000/src/taskpane/taskpane.html"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="CommandsGroup.Label" DefaultValue="Volkers Add-in"/>
+          <bt:String id="TaskpaneButton.Label" DefaultValue="Verwerk order"/>
+          <bt:String id="TaskpaneButton.SupertipTitle" DefaultValue="Verwerk order"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="TaskpaneButton.SupertipText" DefaultValue="Open the Hello world add-in"/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>

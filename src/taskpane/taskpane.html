@@ -1,0 +1,197 @@
+<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Office JavaScript API -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css">
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="taskpane.css">
+</head>
+
+<body>
+        <header class="header">
+            <div class="ms-font-xxl">Volkers</div>
+        </header>
+    <div class="container">
+        <div class="customer-section">
+            <label class="ms-font-m">Klant:</label>
+            <p id="email_sender" class="ms-font-l">Klant</p>
+        </div>
+        <div class="button-section">
+            <button class="ms-font-l" id="readAttachments">Read Attachments (Read mode)</button>
+            <button class="ms-font-l" id="readAttachmentsCompose">Read Attachments (Compose mode)</button>
+            <button class="ms-font-l" id="openDialogButton">Open Dialog</button> <!-- New button to open the dialog -->
+        </div>
+    </div>
+    
+    <div id="mode"></div>
+
+    <!-- The following image URL tracks diagnostic data for this sample add-in. Please remove the image tag if you reuse this sample in your own code project. -->
+    <img src="https://pnptelemetry.azurewebsites.net/pnp-officeaddins/samples/outlook-add-in-hello-world-run" />
+</body>
+
+<script>
+
+    Office.onReady((info) => {
+        if (info.host === Office.HostType.Outlook) {
+            const item = Office.context.mailbox.item;
+            
+            if (Office.context.mailbox.item.getComposeTypeAsync) {
+                console.log("This is a compose form.");
+            } else {
+                if (item.itemType === Office.MailboxEnums.ItemType.Message) {
+                    const emailAddress = item.from.emailAddress;
+                    const company = parseCompanyFromEmail(emailAddress);
+                    document.getElementById("email_sender").innerText = company;
+                } else {
+                    document.getElementById("email_sender").innerText = "This is not an email message.";
+                }
+            }
+
+            document.getElementById("readAttachments").onclick = getAttachmentContentRead; // Attach event handler
+            document.getElementById("readAttachmentsCompose").onclick = getAttachmentContentCompose; // Attach event handler
+            Office.context.mailbox.addHandlerAsync(Office.EventType.ItemChanged, itemChanged);
+            updateTaskPaneUI(Office.context.mailbox.item);
+            document.getElementById("openDialogButton").onclick = openDialog;
+        }
+    });
+
+    function parseCompanyFromEmail(email) {
+        // Split the email address at the '@' character
+        const parts = email.split('@');
+        if (parts.length === 2) {
+            // Split the domain at the '.' character
+            const domainParts = parts[1].split('.');
+            if (domainParts.length > 1) {
+                // Return the first part of the domain
+                return domainParts[0];
+            }
+        }
+        return "Unknown Company";
+    }
+
+    function itemChanged(eventArgs) {
+        // Update UI based on the new current item.
+        updateTaskPaneUI(Office.context.mailbox.item);
+    }
+
+    function updateTaskPaneUI(item) {
+        // Assuming that item is always a read item (instead of a compose item). 
+        if (item != null) {
+            document.getElementById("mode").innerText = "Read mode";
+        } else {
+            document.getElementById("mode").innerText = "Compose mode";
+        }
+    }
+
+    function openDialog() {
+        console.log('opening dialog');
+        var dialogUrl = "https://77.250.103.130:3000/src/taskpane/dialog.html"; // Replace with your dialog URL
+        var options = {
+            height: 50,
+            width: 40
+        };
+        Office.context.ui.displayDialogAsync(dialogUrl, options);
+    }
+
+    function getAttachmentContentCompose() {
+        const item = Office.context.mailbox.item;
+        // Gets the attachments of the current message or appointment in compose mode.
+        const options = { asyncContext: { currentItem: item } };
+        // The getAttachmentsAsync call can only be used in compose mode.
+        item.getAttachmentsAsync(options, callback);
+
+        function callback(result) {
+        if (result.status === Office.AsyncResultStatus.Failed) {
+            console.log(result.error.message);
+            return;
+        }
+
+        if (result.value.length <= 0) {
+            console.log("Mail item has no attachments.");
+            return;
+        }
+
+        for (let i = 0; i < result.value.length; i++) {
+            // Log the attachment type and its contents to the console.
+            result.asyncContext.currentItem.getAttachmentContentAsync(result.value[i].id, handleAttachmentsCallback);
+        }
+        }
+    }
+
+    function getAttachmentContentRead() {
+        // Gets the attachments of the current message or appointment in read mode.
+        // The item.attachments call can only be used in read mode.
+        const item = Office.context.mailbox.item;
+        const attachments = item.attachments;
+        if (attachments.length <= 0) {
+            console.log("Mail item has no attachments.");
+            return;
+        }
+
+        for (let i = 0; i < attachments.length; i++) {
+        // Log the attachment type and its contents to the console.
+            if (!attachments[i].isInline) {
+                // Log the attachment type and its contents to the console.
+                item.getAttachmentContentAsync(attachments[i].id, handleAttachmentsCallback);
+            }
+            item.getAttachmentContentAsync(attachments[i].id, handleAttachmentsCallback);
+        }
+    }
+
+    function handleAttachmentsCallback(result) {
+        // Identifies whether the attachment is a Base64-encoded string, .eml file, .icalendar file, or a URL.
+        switch (result.value.format) {
+            case Office.MailboxEnums.AttachmentContentFormat.Base64:
+                // Handle file attachment.
+                console.log("Attachment is a Base64-encoded string.");
+                break;
+            case Office.MailboxEnums.AttachmentContentFormat.Eml:
+                // Handle email item attachment.
+                console.log("Attachment is a message.");
+                break;
+            case Office.MailboxEnums.AttachmentContentFormat.ICalendar:
+                // Handle .icalender attachment.
+                console.log("Attachment is a calendar item.");
+                break;
+            case Office.MailboxEnums.AttachmentContentFormat.Url:
+                // Handle cloud attachment.
+                console.log("Attachment is a cloud attachment.");
+                break;
+            default:
+                // Handle attachment formats that aren't supported.
+        }
+
+        console.log(result.value.content);
+
+        checkForMissingInformation(result.value.content);
+    }
+
+    function checkForMissingInformation(content) {
+        // Simulating checking for missing information.
+        const missingInformation = "Field XYZ"; // Assume "Field XYZ" is missing.
+        if (missingInformation) {
+            switchToComposeMode(missingInformation);
+        }
+    }
+
+    function switchToComposeMode(missingInformation) {
+        // Get the current message item
+        const item = Office.context.mailbox.item;
+
+        console.log(item.itemId);
+
+        // Create a reply form in compose mode
+        item.displayReplyForm({
+            htmlBody: `The following information is missing: ${missingInformation}`
+        });
+
+        console.log("Switching to compose mode");
+    }
+
+
+</script>
+
+</html>

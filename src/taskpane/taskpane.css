@@ -1,0 +1,60 @@
+/* 
+ * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ */
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Basic styling for the container */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0 20px; /* Add left and right padding */
+}
+
+/* Style for the header */
+.header {
+    background-color: #0075da;
+    color: white;
+    padding: 20px 0; /* Add top and bottom padding */
+    text-align: center;
+}
+
+/* Style for the customer section */
+.customer-section {
+    margin-top: 20px;
+}
+
+/* Style for the label */
+label {
+    font-weight: bold;
+}
+
+/* Style for the buttons section */
+.button-section {
+    margin-top: 20px;
+}
+
+/* Style for the buttons */
+button {
+    width: calc(100% - 40px); /* Button width with left and right padding */
+    margin: 10px 20px; /* Add top and bottom margin */
+    padding: 10px 0; /* Add top and bottom padding */
+    border: none;
+    border-radius: 3px;
+    background-color: #0075da;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
